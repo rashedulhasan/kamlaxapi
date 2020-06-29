@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+    
+    
+    <!-- Rest authentication entry point configuration -->
+      
+    <sec:http use-expressions="true" entry-point-ref="customAuthenticationEntryPoint">
+        <sec:intercept-url pattern="/student/**" access="hasAnyRole('ROLE_ADMIN','ROLE_REST')"/>
+        <sec:form-login authentication-success-handler-ref="successHandler"
+                        authentication-failure-handler-ref="failureHandler" />
+        <sec:http-basic/>
+        <sec:logout />
+    </sec:http>
+    <bean id="customAuthenticationEntryPoint" class="com.kamlax.api.security.CustomAuthenticationEntryPoint"/>
+    <!-- Connect the custom authentication success handler -->
+    <bean id="successHandler"
+          class="com.kamlax.api.security.CustomSavedRequestAwareAuthenticationSuccessHandler" />
+    <!-- Using default failure handler -->
+    <bean id="failureHandler"
+          class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" />
+ 
+    <!-- Authentication manager -->
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider>
+            <sec:user-service>
+                <sec:user name="admin" password="admin" authorities="ROLE_ADMIN"/>
+                <sec:user name="rest" password="rest" authorities="ROLE_REST"/>
+                <sec:user name="user" password="user" authorities="ROLE_USER"/>
+            </sec:user-service>
+        </sec:authentication-provider>
+    </sec:authentication-manager>
+    
+    
+</beans>

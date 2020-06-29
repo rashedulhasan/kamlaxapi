@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kamlax.api.repository.StudentDao">
+    <resultMap id="studentMap" type="com.kamlax.api.domain.Student">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="address" column="address" />
+        <result property="age" column="age" />
+    </resultMap>
+    
+    <select id="getStudentList" parameterType="map" resultMap="studentMap">
+        SELECT id, name, address, age
+        FROM student
+    </select>  
+	
+    <insert id="saveStudent" parameterType="map">
+        INSERT INTO student
+        (id,name, address, age)
+        VALUES (#{id}, #{name}, #{address}, #{age})
+    </insert>
+	
+
+    <update id="updateStudent" parameterType="map">
+        UPDATE student
+        SET name
+        = #{name},
+        address = #{address},
+        age = #{age}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteStudent" parameterType="String">
+        DELETE FROM Student
+        WHERE id = #{id}
+    </delete>
+
+</mapper>    
